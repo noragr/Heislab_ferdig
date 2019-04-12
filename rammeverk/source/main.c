@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "elev.h"
 #include "logic.h"
 #include "timer.h"
@@ -8,7 +12,6 @@
 
 int main() {
 	printf("Press obstruction button to exit program\n");
-    static state_machine_type_t next_state;
     static state_machine_type_t current_state;
     static elev_motor_direction_t current_dir;
 
@@ -28,7 +31,7 @@ int main() {
         
         if (current_state == FAILURE){ //blir dette riktig???
             printf("Unable to initialize elevator hardware!\n");
-            next_state = INITIALIZED; //hmmm
+            current_state = INITIALIZED; //hmmm
         }
 
          if (elev_get_floor_sensor_signal() == N_FLOORS - 1) {
@@ -49,66 +52,3 @@ int main() {
 }
 
 
-/*
-        
-*/
-         // Stop elevator and exit program if the stop button is pressed
-
-
-
-
-
-
-/*
- 
-#include "elev.h"
-#include <stdio.h>
-int main() {
-    // Initialize hardware
-    if (!elev_init()) {
-        printf("Unable to initialize elevator hardware!\n");
-        return 1;
-    }
-    printf("Press STOP button to stop elevator and exit program.\n");
-    elev_set_motor_direction(DIRN_UP);
-    while (1) {
-        // Change direction when we reach top/bottom floor
-        if (elev_get_floor_sensor_signal() == N_FLOORS - 1) {
-            elev_set_motor_direction(DIRN_DOWN);
-        } else if (elev_get_floor_sensor_signal() == 0) {
-            elev_set_motor_direction(DIRN_UP);
-        }
-        // Stop elevator and exit program if the stop button is pressed
-        if (elev_get_stop_signal()) {
-            elev_set_motor_direction(DIRN_STOP);
-            break;
-        }
-    }
-    return 0;
-}
-*/
-
-/*// Initialize hardware
-    if (!elev_init()) {
-        printf("Unable to initialize elevator hardware!\n");
-        return 1;
-    }
-    elev_set_motor_direction(DIRN_DOWN);
-    printf("satte opp\n");
-    while (1) {
-        // Change direction when we reach top/bottom floor
-        if (elev_get_floor_sensor_signal() == N_FLOORS - 1) {
-            elev_set_motor_direction(DIRN_DOWN);
-            current_dir = DIRN_DOWN;
-        } else if (elev_get_floor_sensor_signal() == 0) {
-            elev_set_motor_direction(DIRN_UP);
-            current_dir = DIRN_UP;
-        }
-        // Stop elevator and exit program if the stop button is pressed
-        if (elev_get_stop_signal()) {
-            elev_set_motor_direction(DIRN_STOP);
-            current_dir = DIRN_STOP;
-            break;
-        }
-    }
-*/

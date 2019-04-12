@@ -1,3 +1,7 @@
+/** 
+ * @file
+ */
+
 // Wrapper for libComedi I/O.
 // These functions provide and interface to libComedi limited to use in
 // the real time lab.

@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 // Wrapper for libComedi Elevator control.
 // These functions provides an interface to the elevators in the real time lab
 //
@@ -104,7 +108,7 @@ int elev_get_floor_sensor_signal(void) {
 }
 
 void elev_set_floor_indicator(int floor) {
-    assert(floor >= 0);
+    //assert(floor >= 0);
     assert(floor < N_FLOORS);
 
     // Binary encoding. One light must always be on.

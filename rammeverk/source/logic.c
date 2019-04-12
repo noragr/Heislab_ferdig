@@ -1,9 +1,12 @@
+/** 
+ * @file 
+ */
+
 #include "logic.h"
 #include "channels.h"
 #include "elev.h"
 #include "io.h"
 #include "statemachine.h"
-//#include "timer.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -29,7 +32,9 @@ int initializer(){
 		}
 		printf("initialisert\n");
 		elev_set_motor_direction(DIRN_STOP);
-		elev_set_floor_indicator(floor);	
+		if (floor != -1) {
+			elev_set_floor_indicator(floor);	
+		}
 	}
 	
 	return floor;
@@ -50,7 +55,9 @@ elev_motor_direction_t get_direction(elev_motor_direction_t dir) {
 
 	if (elev_get_floor_sensor_signal() != -1) {
 		current_floor = elev_get_floor_sensor_signal();
-		elev_set_floor_indicator(current_floor);
+		if (current_floor != -1) {
+			elev_set_floor_indicator(current_floor);
+		}
 	}
 
 	if (order_amount() != 0) {
@@ -60,10 +67,11 @@ elev_motor_direction_t get_direction(elev_motor_direction_t dir) {
 			dir = 0;
 			return dir;
 		}  */
+		
 		 if (elev_get_floor_sensor_signal() == -1 &&  ((order_is_in_dir(dir)==-1))) {     // om den er stuck 
 			dir = -1*dir;
 		}
-		else if (order_is_in_dir(dir)== 1 ) { // om den er i riktig retning  //// ENDRE passord
+		if (order_is_in_dir(dir)== 1 ) { // om den er i riktig retning  //// ENDRE passord
 			return dir;
 
 		}else if (order_is_in_dir(dir) == -1 && dir != DIRN_STOP) {   // om den er i feil retning 
@@ -89,6 +97,7 @@ elev_motor_direction_t get_direction(elev_motor_direction_t dir) {
 			}
 		}
 	} else {
+
 		if (elev_get_floor_sensor_signal() == -1) {  // no orders and elevator between floors. 
 			current_floor = initializer();
 			dir = DIRN_STOP;
@@ -180,9 +189,7 @@ int order_is_in_dir(elev_motor_direction_t dir) {
 
 int check_order_complete(elev_motor_direction_t dir){
 	if (elev_get_floor_sensor_signal() != -1) {
-
 		current_floor = elev_get_floor_sensor_signal();
-		printf("%d\n",current_floor);
 		if (current_floor != -1) {
 			elev_set_floor_indicator(current_floor);
 			if (dir == DIRN_UP ) {
@@ -191,7 +198,6 @@ int check_order_complete(elev_motor_direction_t dir){
 				}
 			}else if (dir == DIRN_DOWN) {
 				if (get_order(current_floor, BUTTON_COMMAND) || get_order(current_floor, BUTTON_CALL_DOWN)) {
-					printf("get order på current_floor\n");
 					return 1;
 				}
 			}	
@@ -204,7 +210,9 @@ int check_order_complete(elev_motor_direction_t dir){
 int no_more_orders_dir(elev_motor_direction_t dir) {
 	if (elev_get_floor_sensor_signal() != -1) {
 		current_floor = elev_get_floor_sensor_signal();
-		elev_set_floor_indicator(current_floor);
+		if (current_floor != -1) {
+			elev_set_floor_indicator(current_floor);
+		}
 		if (dir == DIRN_UP) {
 			if (order_is_in_dir(dir) == -1) {
 				return 1;
@@ -217,48 +225,4 @@ int no_more_orders_dir(elev_motor_direction_t dir) {
 	}
 	return 0;
 }
-
-
-
-
-/*
-current_floor = elev_get_floor_sensor_signal();
-	if (current_floor != -1) {
-		for (int button = 0; button < 3; button++) {
-			if (get_order(current_floor, button)) {
-				return 1;
-			}
-		}
-	}
-
-}
-			int order = 0;
-			for (int floor = current_floor+1; floor < N_FLOORS; floor++) {
-				if ((!(get_order(floor, BUTTON_CALL_UP) || get_order(floor, BUTTON_COMMAND) 
-					|| get_order(floor, BUTTON_CALL_DOWN))) && get_order(current_floor, BUTTON_CALL_DOWN)) {
-					order++;
-				}else {
-					order = 0;
-					break;
-				}
-			}if (order) {
-				return 1;
-			}
-
-if ((!(get_order(floor, BUTTON_CALL_UP) || get_order(floor, BUTTON_COMMAND) 
-					|| get_order(floor, BUTTON_CALL_DOWN))) && get_order(current_floor, BUTTON_CALL_UP)) {
-
-					order++;
-				}else{
-					order = 0;
-					break;
-				}
-			}if (order) {
-				return 1;
-			}
-			int order = 0;
-			for (int floor = current_floor-1; floor >= 0; floor--) {
-				
-		}
-*/
 

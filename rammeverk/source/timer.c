@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 #include "timer.h"
 #include "elev.h"
 #include <time.h>
@@ -5,14 +9,13 @@
 
 
 time_t start_time(){
-	return time(NULL);  //time() returns seconds since pre-defined value
+	return time(NULL); 
 }
-
 
 int timer_expired(time_t start_time){
 	time_t end_time = time(NULL);
-	if (end_time - start_time >= 3){ //double difftime(time_t time1, time_t time2) returns diff in sec between time1 and time2 (time1-time2)
-		return 1; //timer expired
+	if (end_time - start_time >= 3){ 
+		return 1; 
 	}
 	return 0;
 }
